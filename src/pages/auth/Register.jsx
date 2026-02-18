@@ -12,14 +12,17 @@ export default function Register() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  // 🔥 Debug submit function
   const submit = async (e) => {
     e.preventDefault();
 
     try {
-      await API.post("/api/auth/register", form);
+      const res = await API.post("/api/auth/register", form);
+      console.log("Success:", res.data);
       alert("Registered");
-    } catch {
-      alert("Error");
+    } catch (err) {
+      console.log("Error:", err.response?.data);
+      alert(JSON.stringify(err.response?.data));
     }
   };
 
@@ -54,7 +57,6 @@ export default function Register() {
           Register
         </button>
 
-        {/* 🔥 Login link */}
         <p className="text-sm mt-3 text-center">
           Already have an account?{" "}
           <Link to="/" className="text-blue-500 font-semibold">
