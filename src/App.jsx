@@ -1,9 +1,12 @@
-function App() {
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+
+export default function App() {
   return (
-    <div className="text-4xl font-bold text-blue-500">
-      Tailwind Working 🚀
-    </div>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
   );
 }
-
-export default App;
