@@ -1,13 +1,11 @@
-import { useAuth } from "../../context/AuthContext";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
 export default function Dashboard() {
-  const { user } = useAuth();
-
   return (
-    <div className="p-10">
+    <DashboardLayout>
       <h1 className="text-3xl font-bold">
-        Welcome {user?.name}
+        Welcome to your banking dashboard 🚀
       </h1>
-    </div>
+    </DashboardLayout>
   );
 }
