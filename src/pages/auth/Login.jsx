@@ -1,20 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import API from "../../api/axios";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const submit = async (e) => {
     e.preventDefault();
+
     try {
-      await API.post("/api/auth/login", form);
-      alert("Login success");
-    } catch {
-      alert("Error");
+      const res = await API.post("/api/auth/login", form);
+
+      // 🔥 save user in context
+      setUser(res.data.user);
+
+      // 🔥 redirect to dashboard
+      navigate("/dashboard");
+    } catch (err) {
+      console.log(err.response?.data);
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
