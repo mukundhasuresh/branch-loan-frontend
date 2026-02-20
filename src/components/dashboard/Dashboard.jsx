@@ -29,8 +29,18 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <StatsCards stats={stats} />
-      <LoanChart data={chart} />
+      {/* 🔥 Heading */}
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">
+        Financial Overview
+      </h1>
+
+      {/* 🔥 Stats Cards */}
+      <StatsCards stats={stats || {}} />
+
+      {/* 🔥 Chart section with spacing */}
+      <div className="mt-6">
+        <LoanChart data={chart || []} />
+      </div>
     </DashboardLayout>
   );
 }
