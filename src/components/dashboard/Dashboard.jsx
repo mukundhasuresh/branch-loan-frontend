@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import API from "../../api/axios";
 import DashboardLayout from "../../layouts/DashboardLayout";
-import StatsCards from "../../components/dashboard/StatsCards";
-import LoanChart from "../../components/dashboard/LoanChart";
+import StatsCards from "./StatsCards";
+import LoanChart from "./LoanChart";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({});
@@ -10,12 +10,20 @@ export default function Dashboard() {
 
   useEffect(() => {
     const load = async () => {
-      const s = await API.get("/api/analytics/stats");
-      const c = await API.get("/api/analytics/distribution");
+      try {
+        const s = await API.get("/api/analytics/stats");
+        console.log("Stats:", s.data);
 
-      setStats(s.data);
-      setChart(c.data);
+        const c = await API.get("/api/analytics/distribution");
+        console.log("Chart:", c.data);
+
+        setStats(s.data);
+        setChart(c.data);
+      } catch (err) {
+        console.error("Dashboard load error:", err);
+      }
     };
+
     load();
   }, []);
 
