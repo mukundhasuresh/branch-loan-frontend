@@ -40,9 +40,10 @@ export default function DashboardLayout({ children }) {
             <FileText size={18} /> Loans
           </Link>
 
+          {/* ✅ Updated Fraud button */}
           <Link
             to="/fraud"
-            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition"
+            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 cursor-pointer"
           >
             <ShieldAlert size={18} /> Fraud
           </Link>
