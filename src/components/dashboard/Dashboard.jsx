@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import API from "../../api/axios";
-import DashboardLayout from "../../layouts/DashboardLayout";
 import StatsCards from "./StatsCards";
 import LoanChart from "./LoanChart";
 
@@ -28,7 +27,8 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <DashboardLayout>
+    <div className="flex-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:to-black p-8 min-h-screen">
+      
       {/* 🔥 Heading */}
       <h1 className="text-2xl font-bold mb-6 dark:text-white">
         Financial Overview
@@ -37,10 +37,11 @@ export default function Dashboard() {
       {/* 🔥 Stats Cards */}
       <StatsCards stats={stats || {}} />
 
-      {/* 🔥 Chart section with spacing */}
+      {/* 🔥 Chart section */}
       <div className="mt-6">
         <LoanChart data={chart || []} />
       </div>
-    </DashboardLayout>
+
+    </div>
   );
 }
