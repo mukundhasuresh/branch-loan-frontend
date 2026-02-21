@@ -5,8 +5,6 @@ import { useAuth } from "../../context/AuthContext";
 
 export default function Loans() {
   const [loans, setLoans] = useState([]);
-
-  /* Search + Filter states */
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
 
@@ -20,8 +18,6 @@ export default function Loans() {
   useEffect(() => {
     load();
   }, []);
-
-  /* Actions */
 
   const reviewLoan = async (id) => {
     await API.put(`/api/loan/review/${id}`);
@@ -38,14 +34,6 @@ export default function Loans() {
     load();
   };
 
-  /* Filtered loans */
-  const filteredLoans = loans.filter((loan) => {
-    return (
-      loan.customerName.toLowerCase().includes(search.toLowerCase()) &&
-      (status ? loan.status === status : true)
-    );
-  });
-
   return (
     <DashboardLayout>
       <h1 className="text-2xl font-bold mb-6 dark:text-white">
@@ -56,7 +44,7 @@ export default function Loans() {
         Logged in as: <span className="font-semibold">{user?.role}</span>
       </p>
 
-      {/*  Search + Filter UI */}
+      {/* Search and filter */}
       <div className="flex gap-4 mb-6">
         <input
           placeholder="Search customer..."
@@ -91,62 +79,71 @@ export default function Loans() {
           </thead>
 
           <tbody>
-            {filteredLoans.map((loan) => (
-              <tr
-                key={loan._id}
-                className="border-t dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
-              >
-                <td className="p-4">{loan.customerName}</td>
-                <td>₹ {loan.amount}</td>
+            {loans
+              .filter((loan) =>
+                loan.customerName
+                  .toLowerCase()
+                  .includes(search.toLowerCase())
+              )
+              .filter((loan) =>
+                status ? loan.status === status : true
+              )
+              .map((loan) => (
+                <tr
+                  key={loan._id}
+                  className="border-t dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  <td className="p-4">{loan.customerName}</td>
+                  <td>₹ {loan.amount}</td>
 
-                <td>
-                  <span className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm">
-                    {loan.status}
-                  </span>
-                </td>
-
-                <td>
-                  {loan.fraudFlag ? (
-                    <span className="text-red-500 font-semibold">
-                      High Risk
+                  <td>
+                    <span className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm">
+                      {loan.status}
                     </span>
-                  ) : (
-                    <span className="text-green-500">Safe</span>
-                  )}
-                </td>
+                  </td>
 
-                <td className="space-x-2">
-                  {user?.role === "manager" &&
-                    loan.status === "pending" && (
-                      <button
-                        onClick={() => reviewLoan(loan._id)}
-                        className="bg-blue-600 text-white px-3 py-1 rounded"
-                      >
-                        Review
-                      </button>
+                  <td>
+                    {loan.fraudFlag ? (
+                      <span className="text-red-500 font-semibold">
+                        High Risk
+                      </span>
+                    ) : (
+                      <span className="text-green-500">Safe</span>
                     )}
+                  </td>
 
-                  {user?.role === "admin" &&
-                    loan.status === "manager_approved" && (
-                      <>
+                  <td className="space-x-2">
+                    {user?.role === "manager" &&
+                      loan.status === "pending" && (
                         <button
-                          onClick={() => approveLoan(loan._id)}
-                          className="bg-green-600 text-white px-3 py-1 rounded"
+                          onClick={() => reviewLoan(loan._id)}
+                          className="bg-blue-600 text-white px-3 py-1 rounded"
                         >
-                          Approve
+                          Review
                         </button>
+                      )}
 
-                        <button
-                          onClick={() => rejectLoan(loan._id)}
-                          className="bg-red-600 text-white px-3 py-1 rounded"
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
-                </td>
-              </tr>
-            ))}
+                    {user?.role === "admin" &&
+                      loan.status === "manager_approved" && (
+                        <>
+                          <button
+                            onClick={() => approveLoan(loan._id)}
+                            className="bg-green-600 text-white px-3 py-1 rounded"
+                          >
+                            Approve
+                          </button>
+
+                          <button
+                            onClick={() => rejectLoan(loan._id)}
+                            className="bg-red-600 text-white px-3 py-1 rounded"
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
