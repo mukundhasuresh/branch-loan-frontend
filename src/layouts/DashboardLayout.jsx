@@ -1,13 +1,17 @@
+import { useState } from "react";
 import { Home, FileText, ShieldAlert, Bell, Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useNotification } from "../context/NotificationContext";
+import NotificationPanel from "../components/NotificationPanel";
 
 export default function DashboardLayout({ children }) {
   const { user } = useAuth();
   const { dark, setDark } = useTheme();
   const { notifications } = useNotification();
+
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex h-screen font-sans">
@@ -18,13 +22,18 @@ export default function DashboardLayout({ children }) {
         </h1>
 
         {/* Notification Bell */}
-        <div className="relative mb-4">
+        <div
+          onClick={() => setOpen(!open)}
+          className="relative mb-4 cursor-pointer"
+        >
           <Bell className="text-gray-700 dark:text-gray-300" />
           {notifications.length > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
               {notifications.length}
             </span>
           )}
+
+          <NotificationPanel open={open} />
         </div>
 
         {/* Dark Mode Toggle */}
