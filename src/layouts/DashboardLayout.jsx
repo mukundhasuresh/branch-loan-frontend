@@ -2,10 +2,12 @@ import { Home, FileText, ShieldAlert, Bell, Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
+import { useNotification } from "../context/NotificationContext";
 
 export default function DashboardLayout({ children }) {
   const { user } = useAuth();
   const { dark, setDark } = useTheme();
+  const { notifications } = useNotification();
 
   return (
     <div className="flex h-screen font-sans">
@@ -14,6 +16,16 @@ export default function DashboardLayout({ children }) {
         <h1 className="text-xl font-bold mb-6 dark:text-white">
           Branch Loan
         </h1>
+
+        {/* Notification Bell */}
+        <div className="relative mb-4">
+          <Bell className="text-gray-700 dark:text-gray-300" />
+          {notifications.length > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+              {notifications.length}
+            </span>
+          )}
+        </div>
 
         {/* Dark Mode Toggle */}
         <button
@@ -40,7 +52,6 @@ export default function DashboardLayout({ children }) {
             <FileText size={18} /> Loans
           </Link>
 
-          {/* ✅ Updated Fraud button */}
           <Link
             to="/fraud"
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 cursor-pointer"
