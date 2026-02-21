@@ -5,6 +5,11 @@ import { useAuth } from "../../context/AuthContext";
 
 export default function Loans() {
   const [loans, setLoans] = useState([]);
+
+  /* Search + Filter states */
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+
   const { user } = useAuth();
 
   const load = async () => {
@@ -16,7 +21,7 @@ export default function Loans() {
     load();
   }, []);
 
-  /* 🚀 STEP 13.3 – Functions */
+  /* Actions */
 
   const reviewLoan = async (id) => {
     await API.put(`/api/loan/review/${id}`);
@@ -33,6 +38,14 @@ export default function Loans() {
     load();
   };
 
+  /* Filtered loans */
+  const filteredLoans = loans.filter((loan) => {
+    return (
+      loan.customerName.toLowerCase().includes(search.toLowerCase()) &&
+      (status ? loan.status === status : true)
+    );
+  });
+
   return (
     <DashboardLayout>
       <h1 className="text-2xl font-bold mb-6 dark:text-white">
@@ -43,6 +56,28 @@ export default function Loans() {
         Logged in as: <span className="font-semibold">{user?.role}</span>
       </p>
 
+      {/*  Search + Filter UI */}
+      <div className="flex gap-4 mb-6">
+        <input
+          placeholder="Search customer..."
+          className="border rounded-lg p-2 w-64 dark:bg-gray-800 dark:border-gray-700"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <select
+          className="border rounded-lg p-2 dark:bg-gray-800 dark:border-gray-700"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="">All</option>
+          <option value="pending">Pending</option>
+          <option value="manager_approved">Manager Approved</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow border dark:border-gray-800 overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-100 dark:bg-gray-800">
@@ -51,12 +86,12 @@ export default function Loans() {
               <th>Amount</th>
               <th>Status</th>
               <th>Risk</th>
-              <th>Actions</th> {/* 🚀 NEW */}
+              <th>Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {loans.map((loan) => (
+            {filteredLoans.map((loan) => (
               <tr
                 key={loan._id}
                 className="border-t dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -64,14 +99,12 @@ export default function Loans() {
                 <td className="p-4">{loan.customerName}</td>
                 <td>₹ {loan.amount}</td>
 
-                {/* 🚀 Styled Status */}
                 <td>
                   <span className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm">
                     {loan.status}
                   </span>
                 </td>
 
-                {/* Risk */}
                 <td>
                   {loan.fraudFlag ? (
                     <span className="text-red-500 font-semibold">
@@ -82,9 +115,7 @@ export default function Loans() {
                   )}
                 </td>
 
-                {/* 🚀 STEP 13.2 – Actions */}
                 <td className="space-x-2">
-                  {/* Manager review */}
                   {user?.role === "manager" &&
                     loan.status === "pending" && (
                       <button
@@ -95,7 +126,6 @@ export default function Loans() {
                       </button>
                     )}
 
-                  {/* Admin approval */}
                   {user?.role === "admin" &&
                     loan.status === "manager_approved" && (
                       <>
