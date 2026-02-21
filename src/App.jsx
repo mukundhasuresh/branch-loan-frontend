@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
-import Fraud from "./pages/fraud/Fraud"; // 👉 NEW
+import Fraud from "./pages/fraud/Fraud";
+import Loans from "./pages/loans/Loans"; // 👉 NEW
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -28,6 +29,16 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Fraud />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* 🔒 Protected loans page */}
+      <Route
+        path="/loans"
+        element={
+          <ProtectedRoute>
+            <Loans />
           </ProtectedRoute>
         }
       />
