@@ -13,6 +13,7 @@ import {
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
@@ -21,21 +22,24 @@ export default function Login() {
 
   const submit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const res = await API.post("/api/auth/login", form);
       setUser(res.data.user);
       navigate("/dashboard");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:to-black font-sans">
-
-      {/* LEFT SIDE – PRODUCT */}
+      
+      {/* LEFT SIDE */}
       <div className="hidden lg:flex flex-col justify-center w-1/2 px-20">
-
         <h1 className="text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
           Branch Loan
         </h1>
@@ -46,7 +50,6 @@ export default function Login() {
         </p>
 
         <div className="space-y-7">
-
           <Benefit
             icon={<ShieldCheck />}
             title="AI Fraud Detection"
@@ -72,7 +75,6 @@ export default function Login() {
           />
         </div>
 
-        {/* TRUST SECTION */}
         <div className="mt-14 flex gap-8 text-sm text-gray-500 dark:text-gray-400">
           <Trust icon={<Lock />} text="Secure Authentication" />
           <Trust icon={<ShieldCheck />} text="Bank-grade Security" />
@@ -80,9 +82,8 @@ export default function Login() {
         </div>
       </div>
 
-      {/* RIGHT SIDE – LOGIN */}
-      <div className="flex items-center justify-center w-full lg:w-1/2 px-6">
-
+      {/* RIGHT SIDE */}
+      <div className="flex items-center justify-center w-full lg:w-1/2 px-6 py-10">
         <form
           onSubmit={submit}
           className="bg-white/70 dark:bg-gray-900 backdrop-blur-xl p-10 rounded-2xl shadow-xl w-full max-w-md border dark:border-gray-800"
@@ -96,6 +97,7 @@ export default function Login() {
           </p>
 
           <input
+            autoFocus
             name="email"
             placeholder="Email address"
             className="border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg p-3 w-full mb-4 focus:ring-2 focus:ring-blue-500 outline-none transition"
@@ -112,11 +114,13 @@ export default function Login() {
             required
           />
 
-          <button className="bg-blue-600 hover:bg-blue-700 transition text-white w-full p-3 rounded-lg font-medium shadow-md">
-            Login
+          <button
+            disabled={loading}
+            className="bg-blue-600 hover:bg-blue-700 transition text-white w-full p-3 rounded-lg font-medium shadow-md disabled:opacity-60"
+          >
+            {loading ? "Signing in..." : "Login"}
           </button>
 
-          {/* Divider */}
           <div className="my-6 border-t dark:border-gray-700" />
 
           <p className="text-sm text-center text-gray-600 dark:text-gray-400">
