@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../../api/axios";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import { useAuth } from "../../context/AuthContext";
+import LoanTimeline from "../../components/LoanTimeline";
 
 export default function Loans() {
   const [loans, setLoans] = useState([]);
@@ -44,7 +45,6 @@ export default function Loans() {
         Logged in as: <span className="font-semibold">{user?.role}</span>
       </p>
 
-      {/* Search and filter */}
       <div className="flex gap-4 mb-6">
         <input
           placeholder="Search customer..."
@@ -97,9 +97,7 @@ export default function Loans() {
                   <td>₹ {loan.amount}</td>
 
                   <td>
-                    <span className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-sm">
-                      {loan.status}
-                    </span>
+                    <LoanTimeline status={loan.status} />
                   </td>
 
                   <td>
