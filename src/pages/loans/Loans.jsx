@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import API from "../../api/axios";
 import DashboardLayout from "../../layouts/DashboardLayout";
+import { useAuth } from "../../context/AuthContext"; // 👉 NEW
 
 export default function Loans() {
   const [loans, setLoans] = useState([]);
+  const { user } = useAuth(); // 👉 NEW
 
   const load = async () => {
     const res = await API.get("/api/loan");
@@ -19,6 +21,11 @@ export default function Loans() {
       <h1 className="text-2xl font-bold mb-6 dark:text-white">
         Loan Management
       </h1>
+
+      {/* 👉 Example: show role */}
+      <p className="mb-4 text-gray-600 dark:text-gray-400">
+        Logged in as: <span className="font-semibold">{user?.role}</span>
+      </p>
 
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow border dark:border-gray-800 overflow-hidden">
         <table className="w-full">
@@ -47,9 +54,7 @@ export default function Loans() {
                       High Risk
                     </span>
                   ) : (
-                    <span className="text-green-500">
-                      Safe
-                    </span>
+                    <span className="text-green-500">Safe</span>
                   )}
                 </td>
               </tr>
