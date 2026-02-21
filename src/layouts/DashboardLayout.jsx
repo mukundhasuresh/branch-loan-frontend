@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Home, FileText, ShieldAlert, Bell, Moon, Sun } from "lucide-react";
+import {
+  Home,
+  FileText,
+  ShieldAlert,
+  Bell,
+  Moon,
+  Sun,
+  Menu,
+  X,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
@@ -14,9 +23,20 @@ export default function DashboardLayout({ children }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex h-screen font-sans">
+    <div className="flex min-h-screen font-sans">
+      {/* Mobile menu button */}
+      <button
+        className="lg:hidden fixed top-4 left-4 z-50 bg-white dark:bg-gray-900 p-2 rounded shadow"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? <X /> : <Menu />}
+      </button>
+
       {/* Sidebar */}
-      <aside className="w-64 bg-white/70 dark:bg-gray-900 backdrop-blur-xl border-r dark:border-gray-800 shadow-lg p-6 relative">
+      <aside
+        className={`fixed lg:static z-40 w-64 bg-white/70 dark:bg-gray-900 backdrop-blur-xl border-r dark:border-gray-800 shadow-lg p-6 min-h-screen transition-transform
+          ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+      >
         <h1 className="text-xl font-bold mb-6 dark:text-white">
           Branch Loan
         </h1>
@@ -49,26 +69,25 @@ export default function DashboardLayout({ children }) {
         <nav className="space-y-4">
           <Link
             to="/dashboard"
-            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition"
+            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <Home size={18} /> Dashboard
           </Link>
 
           <Link
             to="/loans"
-            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition"
+            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <FileText size={18} /> Loans
           </Link>
 
           <Link
             to="/fraud"
-            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 cursor-pointer"
+            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <ShieldAlert size={18} /> Fraud
           </Link>
 
-          {/* Fraud Analytics menu */}
           <Link
             to="/fraud-analytics"
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
@@ -78,7 +97,7 @@ export default function DashboardLayout({ children }) {
 
           <Link
             to="/notifications"
-            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition"
+            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <Bell size={18} /> Notifications
           </Link>
@@ -93,8 +112,8 @@ export default function DashboardLayout({ children }) {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:to-black p-8 overflow-y-auto">
+      {/* Content */}
+      <main className="flex-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:to-black p-6 lg:p-8 overflow-y-auto">
         {children}
       </main>
     </div>
