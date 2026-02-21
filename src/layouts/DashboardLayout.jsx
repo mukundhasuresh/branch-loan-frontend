@@ -68,6 +68,14 @@ export default function DashboardLayout({ children }) {
             <ShieldAlert size={18} /> Fraud
           </Link>
 
+          {/* Fraud Analytics menu */}
+          <Link
+            to="/fraud-analytics"
+            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
+          >
+            <ShieldAlert size={18} /> Fraud Analytics
+          </Link>
+
           <Link
             to="/notifications"
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition"
