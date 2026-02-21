@@ -16,30 +16,24 @@ export default function Login() {
 
     try {
       const res = await API.post("/api/auth/login", form);
-
-      // 🔥 save user in context
       setUser(res.data.user);
-
-      // 🔥 redirect to dashboard
       navigate("/dashboard");
     } catch (err) {
-      // ✅ TEMPORARY FULL DEBUG
-      console.log("FULL ERROR:", err);
-      console.log("RESPONSE:", err.response);
-      console.log("DATA:", err.response?.data);
-      alert(err.response?.data?.message || "Unknown error");
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div className="h-screen flex bg-gradient-to-br from-blue-50 to-indigo-100 font-sans">
-      {/* Left side */}
-      <div className="hidden md:flex flex-col justify-center w-1/2 p-16">
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+    <div className="min-h-screen flex bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:to-black font-sans">
+      
+      {/* Left Branding */}
+      <div className="hidden md:flex flex-col justify-center w-1/2 px-16">
+        <h1 className="text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
           Branch Loan
         </h1>
-        <p className="text-gray-600 text-lg">
-          Secure. Intelligent. Modern banking.
+
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md">
+          Secure, intelligent, and modern loan management platform with fraud detection and real-time analytics.
         </p>
       </div>
 
@@ -47,34 +41,39 @@ export default function Login() {
       <div className="flex items-center justify-center w-full md:w-1/2">
         <form
           onSubmit={submit}
-          className="bg-white/70 backdrop-blur-xl p-8 rounded-2xl shadow-xl w-96 border"
+          className="bg-white/70 dark:bg-gray-900 backdrop-blur-xl p-10 rounded-2xl shadow-xl w-[380px] border dark:border-gray-800"
         >
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-            Welcome Back
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+            Welcome back
           </h2>
 
           <input
             name="email"
-            placeholder="Email"
-            className="border rounded-lg p-3 w-full mb-4 focus:ring-2 focus:ring-blue-400 outline-none"
+            placeholder="Email address"
+            className="border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg p-3 w-full mb-4 focus:ring-2 focus:ring-blue-500 outline-none transition"
             onChange={handleChange}
+            required
           />
 
           <input
             name="password"
             type="password"
             placeholder="Password"
-            className="border rounded-lg p-3 w-full mb-4 focus:ring-2 focus:ring-blue-400 outline-none"
+            className="border dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg p-3 w-full mb-6 focus:ring-2 focus:ring-blue-500 outline-none transition"
             onChange={handleChange}
+            required
           />
 
-          <button className="bg-blue-600 hover:bg-blue-700 transition text-white w-full p-3 rounded-lg">
+          <button className="bg-blue-600 hover:bg-blue-700 transition text-white w-full p-3 rounded-lg font-medium shadow-md">
             Login
           </button>
 
-          <p className="text-sm mt-4 text-center">
+          <p className="text-sm mt-5 text-center text-gray-600 dark:text-gray-400">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-blue-600 font-medium">
+            <Link
+              to="/register"
+              className="text-blue-600 dark:text-blue-400 font-medium"
+            >
               Register
             </Link>
           </p>
