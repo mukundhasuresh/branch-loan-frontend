@@ -36,7 +36,14 @@ export default function FraudAnalytics() {
       <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow border dark:border-gray-800">
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
-            <Pie data={data} dataKey="value" label>
+            <Pie
+              data={data}
+              dataKey="value"
+              label={({ name, percent }) =>
+                `${name} ${(percent * 100).toFixed(0)}%`
+              }
+              labelLine={false}
+            >
               {data.map((_, i) => (
                 <Cell key={i} fill={colors[i]} />
               ))}
