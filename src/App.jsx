@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import Home from "./pages/home/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -11,7 +12,8 @@ export default function App() {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
       {/* Protected dashboard */}
