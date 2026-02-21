@@ -23,8 +23,11 @@ export default function Login() {
       // 🔥 redirect to dashboard
       navigate("/dashboard");
     } catch (err) {
-      console.log(err.response?.data);
-      alert(err.response?.data?.message || "Login failed");
+      // ✅ TEMPORARY FULL DEBUG
+      console.log("FULL ERROR:", err);
+      console.log("RESPONSE:", err.response);
+      console.log("DATA:", err.response?.data);
+      alert(err.response?.data?.message || "Unknown error");
     }
   };
 
