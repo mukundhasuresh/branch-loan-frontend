@@ -3,17 +3,18 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
 import Fraud from "./pages/fraud/Fraud";
-import Loans from "./pages/loans/Loans"; // 👉 NEW
+import Loans from "./pages/loans/Loans";
+import Notifications from "./pages/notifications/Notifications";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   return (
     <Routes>
-      {/* 🔓 Public routes */}
+      {/* Public routes */}
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* 🔒 Protected dashboard */}
+      {/* Protected dashboard */}
       <Route
         path="/dashboard"
         element={
@@ -23,7 +24,7 @@ export default function App() {
         }
       />
 
-      {/* 🔒 Protected fraud page */}
+      {/* Protected fraud page */}
       <Route
         path="/fraud"
         element={
@@ -33,12 +34,22 @@ export default function App() {
         }
       />
 
-      {/* 🔒 Protected loans page */}
+      {/* Protected loans page */}
       <Route
         path="/loans"
         element={
           <ProtectedRoute>
             <Loans />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Protected notifications page */}
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <Notifications />
           </ProtectedRoute>
         }
       />
