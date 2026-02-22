@@ -20,22 +20,25 @@ export default function DashboardLayout({ children }) {
   const { dark, setDark } = useTheme();
   const { notifications } = useNotification();
 
-  const [open, setOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen font-sans">
       {/* Mobile menu button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 bg-white dark:bg-gray-900 p-2 rounded shadow"
-        onClick={() => setOpen(!open)}
+        onClick={() => setSidebarOpen(!sidebarOpen)}
       >
-        {open ? <X /> : <Menu />}
+        {sidebarOpen ? <X /> : <Menu />}
       </button>
 
       {/* Sidebar */}
       <aside
         className={`fixed lg:static z-40 w-64 bg-white/70 dark:bg-gray-900 backdrop-blur-xl border-r dark:border-gray-800 shadow-lg p-6 min-h-screen transition-transform
-          ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+          ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0`}
       >
         <h1 className="text-xl font-bold mb-6 dark:text-white">
           Branch Loan
@@ -43,7 +46,7 @@ export default function DashboardLayout({ children }) {
 
         {/* Notification Bell */}
         <div
-          onClick={() => setOpen(!open)}
+          onClick={() => setNotifOpen(!notifOpen)}
           className="relative mb-4 cursor-pointer"
         >
           <Bell className="text-gray-700 dark:text-gray-300" />
@@ -53,10 +56,10 @@ export default function DashboardLayout({ children }) {
             </span>
           )}
 
-          <NotificationPanel open={open} />
+          <NotificationPanel open={notifOpen} />
         </div>
 
-        {/* Dark Mode Toggle */}
+        {/* Dark Mode */}
         <button
           onClick={() => setDark(!dark)}
           className="mb-6 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
@@ -69,6 +72,7 @@ export default function DashboardLayout({ children }) {
         <nav className="space-y-4">
           <Link
             to="/dashboard"
+            onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <Home size={18} /> Dashboard
@@ -76,6 +80,7 @@ export default function DashboardLayout({ children }) {
 
           <Link
             to="/loans"
+            onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <FileText size={18} /> Loans
@@ -83,6 +88,7 @@ export default function DashboardLayout({ children }) {
 
           <Link
             to="/fraud"
+            onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <ShieldAlert size={18} /> Fraud
@@ -90,6 +96,7 @@ export default function DashboardLayout({ children }) {
 
           <Link
             to="/fraud-analytics"
+            onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <ShieldAlert size={18} /> Fraud Analytics
@@ -97,13 +104,14 @@ export default function DashboardLayout({ children }) {
 
           <Link
             to="/notifications"
+            onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600"
           >
             <Bell size={18} /> Notifications
           </Link>
         </nav>
 
-        {/* User Info */}
+        {/* User */}
         <div className="absolute bottom-6">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Logged in as
@@ -112,8 +120,16 @@ export default function DashboardLayout({ children }) {
         </div>
       </aside>
 
+      {/* Overlay (mobile) */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black/30 lg:hidden"
+        />
+      )}
+
       {/* Content */}
-      <main className="flex-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:to-black p-6 lg:p-8 overflow-y-auto">
+      <main className="flex-1 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-950 dark:to-black p-4 md:p-6 lg:p-8 overflow-y-auto">
         {children}
       </main>
     </div>
