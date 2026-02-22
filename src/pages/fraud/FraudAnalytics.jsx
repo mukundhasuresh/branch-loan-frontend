@@ -7,6 +7,7 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 export default function FraudAnalytics() {
@@ -33,24 +34,31 @@ export default function FraudAnalytics() {
         Fraud Analytics
       </h1>
 
-      <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow border dark:border-gray-800">
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              label={({ name, percent }) =>
-                `${name} ${(percent * 100).toFixed(0)}%`
-              }
-              labelLine={false}
-            >
-              {data.map((_, i) => (
-                <Cell key={i} fill={colors[i]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
+      <div className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-2xl shadow border dark:border-gray-800">
+        {/* Responsive chart height */}
+        <div className="h-72 md:h-96">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                label={({ name, percent }) =>
+                  `${name} ${(percent * 100).toFixed(0)}%`
+                }
+                labelLine={false}
+              >
+                {data.map((_, i) => (
+                  <Cell key={i} fill={colors[i]} />
+                ))}
+              </Pie>
+
+              <Tooltip />
+
+              {/* Always visible legend */}
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </DashboardLayout>
   );
