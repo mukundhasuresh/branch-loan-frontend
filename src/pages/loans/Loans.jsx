@@ -45,16 +45,17 @@ export default function Loans() {
         Logged in as: <span className="font-semibold">{user?.role}</span>
       </p>
 
-      <div className="flex gap-4 mb-6">
+      {/* Responsive filters */}
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <input
           placeholder="Search customer..."
-          className="border rounded-lg p-2 w-64 dark:bg-gray-800 dark:border-gray-700"
+          className="border rounded-lg p-2 w-full md:w-64 dark:bg-gray-800 dark:border-gray-700"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
-          className="border rounded-lg p-2 dark:bg-gray-800 dark:border-gray-700"
+          className="border rounded-lg p-2 w-full md:w-auto dark:bg-gray-800 dark:border-gray-700"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
@@ -66,84 +67,87 @@ export default function Loans() {
         </select>
       </div>
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow border dark:border-gray-800 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-100 dark:bg-gray-800">
-            <tr>
-              <th className="p-4 text-left">Customer</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Risk</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+      {/* Responsive table */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow border dark:border-gray-800">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[700px]">
+            <thead className="bg-gray-100 dark:bg-gray-800">
+              <tr>
+                <th className="p-4 text-left">Customer</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Risk</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {loans
-              .filter((loan) =>
-                loan.customerName
-                  .toLowerCase()
-                  .includes(search.toLowerCase())
-              )
-              .filter((loan) =>
-                status ? loan.status === status : true
-              )
-              .map((loan) => (
-                <tr
-                  key={loan._id}
-                  className="border-t dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
-                >
-                  <td className="p-4">{loan.customerName}</td>
-                  <td>₹ {loan.amount}</td>
+            <tbody>
+              {loans
+                .filter((loan) =>
+                  loan.customerName
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                )
+                .filter((loan) =>
+                  status ? loan.status === status : true
+                )
+                .map((loan) => (
+                  <tr
+                    key={loan._id}
+                    className="border-t dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
+                    <td className="p-4">{loan.customerName}</td>
+                    <td>₹ {loan.amount}</td>
 
-                  <td>
-                    <LoanTimeline status={loan.status} />
-                  </td>
+                    <td>
+                      <LoanTimeline status={loan.status} />
+                    </td>
 
-                  <td>
-                    {loan.fraudFlag ? (
-                      <span className="text-red-500 font-semibold">
-                        High Risk
-                      </span>
-                    ) : (
-                      <span className="text-green-500">Safe</span>
-                    )}
-                  </td>
-
-                  <td className="space-x-2">
-                    {user?.role === "manager" &&
-                      loan.status === "pending" && (
-                        <button
-                          onClick={() => reviewLoan(loan._id)}
-                          className="bg-blue-600 text-white px-3 py-1 rounded"
-                        >
-                          Review
-                        </button>
+                    <td>
+                      {loan.fraudFlag ? (
+                        <span className="text-red-500 font-semibold">
+                          High Risk
+                        </span>
+                      ) : (
+                        <span className="text-green-500">Safe</span>
                       )}
+                    </td>
 
-                    {user?.role === "admin" &&
-                      loan.status === "manager_approved" && (
-                        <>
+                    <td className="space-x-2 whitespace-nowrap">
+                      {user?.role === "manager" &&
+                        loan.status === "pending" && (
                           <button
-                            onClick={() => approveLoan(loan._id)}
-                            className="bg-green-600 text-white px-3 py-1 rounded"
+                            onClick={() => reviewLoan(loan._id)}
+                            className="bg-blue-600 text-white px-3 py-1 rounded"
                           >
-                            Approve
+                            Review
                           </button>
+                        )}
 
-                          <button
-                            onClick={() => rejectLoan(loan._id)}
-                            className="bg-red-600 text-white px-3 py-1 rounded"
-                          >
-                            Reject
-                          </button>
-                        </>
-                      )}
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                      {user?.role === "admin" &&
+                        loan.status === "manager_approved" && (
+                          <>
+                            <button
+                              onClick={() => approveLoan(loan._id)}
+                              className="bg-green-600 text-white px-3 py-1 rounded"
+                            >
+                              Approve
+                            </button>
+
+                            <button
+                              onClick={() => rejectLoan(loan._id)}
+                              className="bg-red-600 text-white px-3 py-1 rounded"
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </DashboardLayout>
   );
